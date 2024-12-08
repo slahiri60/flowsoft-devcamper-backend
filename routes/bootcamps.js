@@ -26,9 +26,24 @@ router.get('/', async (request, response) => {
 // @route   GET /api/v1/bootcamps/:id
 // @access  Public
 router.get('/:id', async (request, response) => {
-  response
-    .status(200)
-    .json({ success: true, msg: `Show bootcamp ${request.params.id}` });
+  try {
+    const bootcamp = await Bootcamp.findById(request.params.id);
+
+    if (!bootcamp) {
+      return response.status(400).json({
+        success: false,
+      });
+    }
+
+    response.status(200).json({
+      success: true,
+      data: bootcamp,
+    });
+  } catch (error) {
+    response.status(400).json({
+      success: false,
+    });
+  }
 });
 
 // @desc    Create new bootcamp
