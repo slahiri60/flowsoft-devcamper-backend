@@ -7,7 +7,19 @@ const router = express.Router();
 // @route   GET /api/v1/bootcamps
 // @access  Public
 router.get('/', async (request, response) => {
-  response.status(200).json({ success: true, msg: 'Show all bootcamps' });
+  try {
+    const bootcamps = await Bootcamp.find();
+
+    response.status(200).json({
+      success: true,
+      count: bootcamps.length,
+      data: bootcamps,
+    });
+  } catch (error) {
+    response.status(400).json({
+      success: false,
+    });
+  }
 });
 
 // @desc    Get single bootcamp
