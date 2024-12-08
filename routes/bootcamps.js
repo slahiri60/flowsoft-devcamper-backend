@@ -35,16 +35,18 @@ router.get('/:id', async (request, response) => {
 // @route   POST /api/v1/bootcamps
 // @access  Private
 router.post('/', async (request, response) => {
-  response.status(200).json({ success: true, msg: 'Create new bootcamp' });
-});
+  try {
+    const bootcamp = await Bootcamp.create(request.body);
 
-// @desc    Update bootcamp
-// @route   PUT /api/v1/bootcamps/:id
-// @access  Private
-router.put('/:id', async (request, response) => {
-  response
-    .status(200)
-    .json({ success: true, msg: `Update bootcamp ${request.params.id}` });
+    response.status(201).json({
+      success: true,
+      data: bootcamp,
+    });
+  } catch (error) {
+    response.status(400).json({
+      success: false,
+    });
+  }
 });
 
 // @desc    Delete bootcamp
