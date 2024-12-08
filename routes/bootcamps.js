@@ -95,9 +95,24 @@ router.put('/:id', async (request, response) => {
 // @route   DELETE /api/v1/bootcamps/:id
 // @access  Private
 router.delete('/:id', async (request, response) => {
-  response
-    .status(200)
-    .json({ success: true, msg: `Delete bootcamp ${request.params.id}` });
+  try {
+    const bootcamp = await Bootcamp.findByIdAndDelete(request.params.id);
+
+    if (!bootcamp) {
+      return response.status(400).json({
+        success: false,
+      });
+    }
+
+    response.status(200).json({
+      success: true,
+      data: {},
+    });
+  } catch (error) {
+    response.status(400).json({
+      success: false,
+    });
+  }
 });
   
 
