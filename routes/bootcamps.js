@@ -64,6 +64,33 @@ router.post('/', async (request, response) => {
   }
 });
 
+// @desc    Update bootcamp
+// @route   PUT /api/v1/bootcamps/:id
+// @access  Private
+router.put('/:id', async (request, response) => {
+  try {
+    const bootcamp = await Bootcamp.findByIdAndUpdate(request.params.id, request.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!bootcamp) {
+      return response.status(400).json({
+        success: false,
+      });
+    }
+
+    response.status(200).json({
+      success: true,
+      data: bootcamp,
+    });
+  } catch (error) {
+    response.status(400).json({
+      success: false,
+    });
+  }
+});
+
 // @desc    Delete bootcamp
 // @route   DELETE /api/v1/bootcamps/:id
 // @access  Private
